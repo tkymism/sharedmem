@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="memmap-core" default="makeh" basedir="..">
+	<property name="include" location="include" />
+	<target name="makeh">
+		<javah classpath="target/classes" class="com.tkym.labs.sharedmem.win.BaseNamedObjectsJni" destdir="${include}" />
+	</target>
+</project>

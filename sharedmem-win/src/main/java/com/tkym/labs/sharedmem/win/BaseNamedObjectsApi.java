@@ -1,0 +1,12 @@
+package com.tkym.labs.sharedmem.win;
+
+enum BaseNamedObjectsApi{
+	CREATE_FILE_MAPPING,
+	OPEN_FILE_MAPPING,
+	MAP_VIEW_OF_FILE,
+	AS_BYTEBUFFER,
+	UNMAP_VIEW_OF_FILE,
+	CREATE_MUTEX,
+	RELEASE_MUTEX,
+	WAIT_FOR_SINGLE_OBJECT,
+}
