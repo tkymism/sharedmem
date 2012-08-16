@@ -3,7 +3,7 @@ package com.tkym.labs.sharedmem.win;
 import java.nio.ByteBuffer;
 
 
-class SharedMemoryLocator {
+public class SharedMemoryLocator {
 	private Mutex mutex = null;
 	private final FileMap file;
 	private final FileMapView view;

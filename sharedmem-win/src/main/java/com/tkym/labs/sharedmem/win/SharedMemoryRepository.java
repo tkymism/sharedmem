@@ -10,7 +10,7 @@ import java.util.concurrent.TimeoutException;
 
 import com.tkym.labs.sharedmem.win.FileMapRepository.NamedMapNotExistsException;
 
-class SharedMemoryRepository{
+public class SharedMemoryRepository{
 	static final int TIMEOUT_WAIT_MUTEX = 1000;
 	private static final SharedMemoryRepository singleton = 
 			new SharedMemoryRepository();
@@ -18,10 +18,10 @@ class SharedMemoryRepository{
 	private SharedMemoryRepository(){
 		allocateFileMap = new ConcurrentHashMap<String, FileMap>();
 	}
-	static SharedMemoryRepository getInstance(){
+	public static SharedMemoryRepository getInstance(){
 		return singleton;
 	}
-	boolean exists(String name) throws TimeoutException{
+	public boolean exists(String name) throws TimeoutException{
 		try {
 			Mutex mutex = lock(name);
 			boolean exists = FileMapRepository.getInstance().exists(name);
@@ -49,16 +49,16 @@ class SharedMemoryRepository{
 			throw new SharedMemoryException(e);
 		}
 	}
-	SharedMemoryLocator writable(String name) throws TimeoutException{
+	public SharedMemoryLocator writable(String name) throws TimeoutException{
 		return open(name, FILE_MAP_WRITE, lock(name));
 	}
-	SharedMemoryLocator readonly(String name) throws TimeoutException{
+	public SharedMemoryLocator readonly(String name) throws TimeoutException{
 		return open(name, FILE_MAP_READ, lock(name));
 	}
-	SharedMemoryLocator copy(String name){
+	public SharedMemoryLocator copy(String name){
 		return open(name, FILE_MAP_COPY, null);
 	}
-	SharedMemoryLocator allocate(String name, long length) throws TimeoutException{
+	public SharedMemoryLocator allocate(String name, long length) throws TimeoutException{
 		Mutex mutex = lock(name);
 		FileMap map = createFileMap(name, length);
 		allocateFileMap.put(name, map);
@@ -73,7 +73,7 @@ class SharedMemoryRepository{
 			throw new SharedMemoryException(e);
 		} 
 	}
-	boolean deallocate(String name){
+	public boolean deallocate(String name){
 		FileMap map = allocateFileMap.get(name);
 		if (map == null) return false;
 		map.close();
