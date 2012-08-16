@@ -15,9 +15,9 @@ class FileMapRepository{
 	static FileMapRepository getInstance(){
 		return singleton;
 	}
-	FileMap create(String name, long length) throws FileMapException{
+	FileMap create(String name, long length) throws BaseNamedObjectsException{
 		int handle = createMemory(name, length);
-		if (handle <= 0) throw new FileMapException(CREATE_FILE_MAPPING, -1*handle, name);
+		if (handle <= 0) throw new BaseNamedObjectsException(CREATE_FILE_MAPPING, -1*handle, name);
 		return new FileMap(name, handle);
 	}
 	
@@ -35,7 +35,7 @@ class FileMapRepository{
 		int[] size = separateToIntValue(length);
 		return BaseNamedObjectsJni.getInstance().createFileMapping(name, PAGE_READWRITE, size[0], size[1]);
 	}
-	boolean exists(String name) throws FileMapException{
+	boolean exists(String name) throws BaseNamedObjectsException{
 		try {
 			openAsRead(name);
 			return true;
@@ -43,28 +43,28 @@ class FileMapRepository{
 			return false;
 		}
 	}
-	FileMap openAsRead(String name) throws FileMapException{
+	FileMap openAsRead(String name) throws BaseNamedObjectsException{
 		return open(name, FILE_MAP_READ);
 	}
-	FileMap openAsWrite(String name) throws FileMapException{
+	FileMap openAsWrite(String name) throws BaseNamedObjectsException{
 		return open(name, FILE_MAP_WRITE);
 	}
-	FileMap openAsCopy(String name) throws FileMapException{
+	FileMap openAsCopy(String name) throws BaseNamedObjectsException{
 		return open(name, FILE_MAP_COPY);
 	}
-	FileMap open(String name, int mode) throws FileMapException{
+	FileMap open(String name, int mode) throws BaseNamedObjectsException{
 		int handle = openMemory(name, mode);
 		if (handle == -2)
 			throw new NamedMapNotExistsException(OPEN_FILE_MAPPING);
 		if (handle <= 0)
-			throw new FileMapException(OPEN_FILE_MAPPING, -1*handle);
+			throw new BaseNamedObjectsException(OPEN_FILE_MAPPING, -1*handle);
 		return new FileMap(name, handle);
 	}
 	synchronized int openMemory(String name, int mode){
 		return BaseNamedObjectsJni.getInstance().openFileMapping(name, mode);
 	}
 	@SuppressWarnings("serial")
-	static class NamedMapNotExistsException extends FileMapException{
+	static class NamedMapNotExistsException extends BaseNamedObjectsException{
 		NamedMapNotExistsException(BaseNamedObjectsApi apiName, String... args) {
 			super(apiName, 2, args);
 		}

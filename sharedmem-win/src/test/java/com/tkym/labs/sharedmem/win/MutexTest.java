@@ -15,13 +15,13 @@ import com.tkym.labs.jvml.JavaLaunchException;
 import com.tkym.labs.jvml.JavaLaunchFactory;
 import com.tkym.labs.sharedmem.win.BaseNamedObjectsJni;
 import com.tkym.labs.sharedmem.win.Mutex;
-import com.tkym.labs.sharedmem.win.MutexException;
+import com.tkym.labs.sharedmem.win.BaseNamedObjectsException;
 import com.tkym.labs.sharedmem.win.MutexRepository;
 
 public class MutexTest {
 	
 	@Test
-	public void testMutexObjects_Case001() throws MutexException, TimeoutException{
+	public void testMutexObjects_Case001() throws BaseNamedObjectsException, TimeoutException{
 		MutexRepository repo = 
 				MutexRepository.getInstance();
 		String mutexName = "testMutexObjects_Case001";
@@ -32,7 +32,7 @@ public class MutexTest {
 	}
 	
 	@Test
-	public void testMutexObjects_Case002() throws MutexException, JavaLaunchException, InterruptedException, ExecutionException, TimeoutException{
+	public void testMutexObjects_Case002() throws BaseNamedObjectsException, JavaLaunchException, InterruptedException, ExecutionException, TimeoutException{
 		MutexRepository repo = 
 				MutexRepository.getInstance();
 		String mutexName = "testMutexObjects_Case002";
@@ -44,7 +44,7 @@ public class MutexTest {
 	}
 	
 	@Test
-	public void testMutexObjects_Case003() throws MutexException, JavaLaunchException, InterruptedException, ExecutionException, TimeoutException{
+	public void testMutexObjects_Case003() throws BaseNamedObjectsException, JavaLaunchException, InterruptedException, ExecutionException, TimeoutException{
 		MutexRepository repo = 
 				MutexRepository.getInstance();
 		String mutexName = "testMutexObjects_Case003";
@@ -63,7 +63,7 @@ public class MutexTest {
 	}
 	
 	@Test
-	public void testMutexObjects_Case004() throws MutexException, JavaLaunchException, InterruptedException, ExecutionException, TimeoutException{
+	public void testMutexObjects_Case004() throws BaseNamedObjectsException, JavaLaunchException, InterruptedException, ExecutionException, TimeoutException{
 		String mutexName = "testMutexObjects_Case004";
 		Future<Integer> f1 =
 				JavaLaunchFactory.
@@ -82,7 +82,7 @@ public class MutexTest {
 	}
 
 	@Test
-	public void testMutexObjects_Case005() throws MutexException, JavaLaunchException, InterruptedException, ExecutionException, TimeoutException{
+	public void testMutexObjects_Case005() throws BaseNamedObjectsException, JavaLaunchException, InterruptedException, ExecutionException, TimeoutException{
 		String mutexName = "testMutexObjects_Case005";
 		System.out.println(mutexName+"start--------");
 		Future<Integer> f1 =
@@ -102,7 +102,7 @@ public class MutexTest {
 	}
 	
 	@Test
-	public void testMutexObjects_Case006() throws MutexException, JavaLaunchException, InterruptedException, ExecutionException, TimeoutException{
+	public void testMutexObjects_Case006() throws BaseNamedObjectsException, JavaLaunchException, InterruptedException, ExecutionException, TimeoutException{
 		String mutexName = "testMutexObjects_Case006";
 		System.out.println(mutexName+"start--------");
 		Future<Integer> f1 =
@@ -144,9 +144,9 @@ public class MutexTest {
 				System.out.println(processName+"release:"+mutexName);
 				mutex.close();
 				System.out.println(processName+"close:"+mutexName);
-			}catch (MutexException e){
+			}catch (BaseNamedObjectsException e){
 				e.printStackTrace();
-				System.exit(e.getErrorCode());
+				System.exit(e.getCode());
 			}catch (TimeoutException e){
 				e.printStackTrace();
 				System.exit(BaseNamedObjectsJni.WAIT_TIMEOUT);

@@ -28,16 +28,14 @@ class SharedMemoryRepository{
 			mutex.release();
 			mutex.close();
 			return exists;
-		} catch (FileMapException e) {
-			throw new SharedMemoryException(e);
-		} catch (MutexException e) {
+		} catch (BaseNamedObjectsException e) {
 			throw new SharedMemoryException(e);
 		}
 	}
 	private FileMap createFileMap(String name, long length){
 		try {
 			return FileMapRepository.getInstance().create(name, length);
-		} catch (FileMapException e) {
+		} catch (BaseNamedObjectsException e) {
 			throw new SharedMemoryException(e);
 		}
 	}
@@ -47,7 +45,7 @@ class SharedMemoryRepository{
 			return new SharedMemoryLocator(map, mode, mutex);
 		} catch (NamedMapNotExistsException e) {
 			return null;
-		} catch (FileMapException e) {
+		} catch (BaseNamedObjectsException e) {
 			throw new SharedMemoryException(e);
 		}
 	}
@@ -71,7 +69,7 @@ class SharedMemoryRepository{
 			Mutex mutex = MutexRepository.getInstance().create(name+".mtx");
 			mutex.waitFor(SharedMemoryRepository.TIMEOUT_WAIT_MUTEX);
 			return mutex;
-		} catch (MutexException e) {
+		} catch (BaseNamedObjectsException e) {
 			throw new SharedMemoryException(e);
 		} 
 	}

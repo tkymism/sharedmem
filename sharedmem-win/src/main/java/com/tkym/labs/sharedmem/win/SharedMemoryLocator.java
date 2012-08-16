@@ -7,7 +7,7 @@ class SharedMemoryLocator {
 	private Mutex mutex = null;
 	private final FileMap file;
 	private final FileMapView view;
-	SharedMemoryLocator(FileMap file, int mode, Mutex mutex) throws FileMapException {
+	SharedMemoryLocator(FileMap file, int mode, Mutex mutex) throws BaseNamedObjectsException {
 		this.file = file;
 		this.mutex = mutex;
 		this.view = file.map(mode);
@@ -18,7 +18,7 @@ class SharedMemoryLocator {
 			mutex.release();
 			mutex.close();
 			mutex = null;
-		} catch (MutexException e) {
+		} catch (BaseNamedObjectsException e) {
 			throw new SharedMemoryException(e);
 		}
 		return this;

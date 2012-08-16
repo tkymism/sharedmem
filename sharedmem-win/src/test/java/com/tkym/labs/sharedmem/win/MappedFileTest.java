@@ -18,7 +18,7 @@ import com.tkym.labs.jvml.JavaLaunchErrorHandle;
 import com.tkym.labs.jvml.JavaLaunchFactory;
 import com.tkym.labs.sharedmem.win.BaseNamedObjectsJni;
 import com.tkym.labs.sharedmem.win.FileMap;
-import com.tkym.labs.sharedmem.win.FileMapException;
+import com.tkym.labs.sharedmem.win.BaseNamedObjectsException;
 import com.tkym.labs.sharedmem.win.FileMapRepository;
 import com.tkym.labs.sharedmem.win.FileMapView;
 import com.tkym.labs.sharedmem.win.FileMapRepository.NamedMapNotExistsException;
@@ -48,7 +48,7 @@ public class MappedFileTest {
 	}
 	
 	@Test
-	public void testNameSharedMemoryProvider_Case003() throws FileMapException {
+	public void testNameSharedMemoryProvider_Case003() throws BaseNamedObjectsException {
 		FileMapRepository repo = FileMapRepository.getInstance();
 		FileMap memory = repo.create("Local\\aaaMemory", 1024);
 		FileMapView view = memory.mapAsWrite();
@@ -62,7 +62,7 @@ public class MappedFileTest {
 	
 	@Test
 	@Ignore
-	public void testNameSharedMemoryProvider_Case004() throws FileMapException {
+	public void testNameSharedMemoryProvider_Case004() throws BaseNamedObjectsException {
 		String namespace = "testNameSharedMemoryProvider_Case004";
 		FileMapRepository repo = FileMapRepository.getInstance();
 		FileMap memory = repo.create(namespace, 1024);
@@ -80,7 +80,7 @@ public class MappedFileTest {
 	
 	@Test
 	@Ignore
-	public void testNameSharedMemoryProvider_Case005() throws FileMapException, InterruptedException {
+	public void testNameSharedMemoryProvider_Case005() throws BaseNamedObjectsException, InterruptedException {
 		String namespace = "testNameSharedMemoryProvider_Case005";
 		FileMapRepository repo = FileMapRepository.getInstance();
 		
@@ -103,7 +103,7 @@ public class MappedFileTest {
 	
 	@Test
 	@Ignore
-	public void testNameSharedMemoryProvider_ErrorCase001() throws FileMapException{
+	public void testNameSharedMemoryProvider_ErrorCase001() throws BaseNamedObjectsException{
 		String namespace = "testNameSharedMemoryProvider_ErrorCase001";
 		FileMapRepository repo = FileMapRepository.getInstance();
 		FileMap mem1 = null;
@@ -112,7 +112,7 @@ public class MappedFileTest {
 		mem1 = repo.create(namespace, 1024);
 		try {
 			mem2 = repo.create(namespace, 1024);
-		} catch (FileMapException e) {
+		} catch (BaseNamedObjectsException e) {
 			assertThat(e.getCode(), is(183));
 			assertThat(e.getMessage(), is("name[testNameSharedMemoryProvider_ErrorCase001 ] is already exists."));
 		} finally {
@@ -123,7 +123,7 @@ public class MappedFileTest {
 	
 	@Test
 	@Ignore
-	public void testMappedFile_Case001() throws FileMapException{
+	public void testMappedFile_Case001() throws BaseNamedObjectsException{
 		String name = "testMappedFile_Case001";
 		String str = "abcde";
 		FileMap m1 = 
@@ -150,7 +150,7 @@ public class MappedFileTest {
 	
 	@Test
 	@Ignore
-	public void testNameSharedMemory_Case005() throws FileMapException{
+	public void testNameSharedMemory_Case005() throws BaseNamedObjectsException{
 		String namespace = "testNameSharedMemory_Case005()";
 		FileMapRepository repo = FileMapRepository.getInstance();
 		String str = craeteStringData();
@@ -177,7 +177,7 @@ public class MappedFileTest {
 	
 	@Test
 	@Ignore
-	public void testNameSharedMemory_Case006() throws FileMapException{
+	public void testNameSharedMemory_Case006() throws BaseNamedObjectsException{
 		String namespace = "testNameSharedMemory_Case006()";
 		FileMapRepository repo = FileMapRepository.getInstance();
 		try {
@@ -190,7 +190,7 @@ public class MappedFileTest {
 	
 	@Test
 	@Ignore
-	public void testSpeedCheckOfRead() throws FileMapException{
+	public void testSpeedCheckOfRead() throws BaseNamedObjectsException{
 		String namespace = "testSpeedCheck()";
 		FileMapRepository repo = FileMapRepository.getInstance();
 		String str = craeteStringData();
@@ -214,7 +214,7 @@ public class MappedFileTest {
 	
 	@Test
 	@Ignore
-	public void testNameSharedMemory_Case008() throws FileMapException{
+	public void testNameSharedMemory_Case008() throws BaseNamedObjectsException{
 		String namespace = "testNameSharedMemory_Case008()";
 		FileMapRepository repo = FileMapRepository.getInstance();
 		FileMap obj = repo.create(namespace, 1000);
@@ -240,7 +240,7 @@ public class MappedFileTest {
 	}
 	
 	@Test
-	public void testNameSharedMemory_Case009() throws FileMapException{
+	public void testNameSharedMemory_Case009() throws BaseNamedObjectsException{
 		String namespace = "testNameSharedMemory_Case009()";
 		FileMapRepository repo = FileMapRepository.getInstance();
 		FileMap obj = repo.create(namespace, 1000);
@@ -260,7 +260,7 @@ public class MappedFileTest {
 	}
 	
 	static class BaseNamedObjectsMain{
-		public static void main(String[] args) throws FileMapException {
+		public static void main(String[] args) throws BaseNamedObjectsException {
 			FileMapRepository repo = FileMapRepository.getInstance();
 			FileMap mem1 = repo.openAsRead(args[0]);
 			FileMapView view = mem1.mapAsRead();

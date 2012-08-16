@@ -25,7 +25,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tkym.labs.jvml.JavaLaunchFactory;
-import com.tkym.labs.sharedmem.win.FileMapException;
+import com.tkym.labs.sharedmem.win.BaseNamedObjectsException;
 import com.tkym.labs.sharedmem.win.SharedMemoryLocator;
 import com.tkym.labs.sharedmem.win.SharedMemoryRepository;
 import com.tkym.labs.sharedmem.win.SharedMemoryAccesser.SharedMemoryDirectAttach;
@@ -50,7 +50,7 @@ public class SharedMemoryTest {
 				sb.append("abcde");
 			return sb.toString();
 		}
-		public static void main(String[] args) throws InterruptedException, FileMapException, IOException, TimeoutException{
+		public static void main(String[] args) throws InterruptedException, BaseNamedObjectsException, IOException, TimeoutException{
 			String name = args[0];
 			int sleepTime = 0;
 			if (args.length>1) sleepTime = new Integer(args[1]).intValue();
@@ -81,7 +81,7 @@ public class SharedMemoryTest {
 	}
 
 	@Test
-	public void testSharedMemoryCase001() throws IOException, FileMapException, TimeoutException, InterruptedException, ExecutionException{
+	public void testSharedMemoryCase001() throws IOException, BaseNamedObjectsException, TimeoutException, InterruptedException, ExecutionException{
 		String name = "testSharedMemoryCase001()";
 		final byte[] data = TEST_STR.getBytes();
 		SharedMemoryRepository.
@@ -134,7 +134,7 @@ public class SharedMemoryTest {
 	}
 	
 	@Test
-	public void testSharedMemoryCase002() throws IOException, FileMapException, TimeoutException, InterruptedException, ExecutionException{
+	public void testSharedMemoryCase002() throws IOException, BaseNamedObjectsException, TimeoutException, InterruptedException, ExecutionException{
 		String name = "testSharedMemoryCase002()";
 		byte[] data = TEST_STR.getBytes();
 		Future<Integer> future = 
@@ -166,7 +166,7 @@ public class SharedMemoryTest {
 	}
 
 	@Test
-	public void testSharedMemoryCase003() throws IOException, FileMapException, TimeoutException, InterruptedException, ExecutionException{
+	public void testSharedMemoryCase003() throws IOException, BaseNamedObjectsException, TimeoutException, InterruptedException, ExecutionException{
 		String name = "testSharedMemoryCase003";
 		SharedMemoryRepository.
 				getInstance().
@@ -209,7 +209,7 @@ public class SharedMemoryTest {
 	}
 	
 	@Test
-	public void testSharedMemoryCase004() throws IOException, FileMapException, TimeoutException, InterruptedException, ExecutionException{
+	public void testSharedMemoryCase004() throws IOException, BaseNamedObjectsException, TimeoutException, InterruptedException, ExecutionException{
 		BufferedImage image = ImageIO.read(SharedMemoryTest.class.getResource("IMG_0106.JPG"));
 		final ImageIcon icon = new ImageIcon(image);
 		final byte[] data = serialize(icon);
