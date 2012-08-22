@@ -13,7 +13,7 @@ import com.tkym.labs.sharedmem.win.FileMapRepository.NamedMapNotExistsException;
 class SharedMemoryImpl implements SharedMemory{
 	private final String name;
 	private final SharedMemoryLockImpl lock;
-	private FileMap owner = null;
+	private FileMap fileMapOwner = null;
 	SharedMemoryImpl(String name){
 		this.name = name;
 		lock = new SharedMemoryLockImpl(this, name);
@@ -51,7 +51,7 @@ class SharedMemoryImpl implements SharedMemory{
 	@Override
 	public SharedMemoryLocator allocate(long length){
 		try {
-			owner = FileMapRepository.
+			fileMapOwner = FileMapRepository.
 					getInstance().
 					create(name, length);
 		} catch (BaseNamedObjectsException e) {
@@ -73,9 +73,9 @@ class SharedMemoryImpl implements SharedMemory{
 	}
 	@Override
 	protected void finalize() throws Throwable {
-		if (owner != null) {
-			owner.close();
-			owner = null;
+		if (fileMapOwner != null) {
+			fileMapOwner.close();
+			fileMapOwner = null;
 		}
 		super.finalize();
 	}

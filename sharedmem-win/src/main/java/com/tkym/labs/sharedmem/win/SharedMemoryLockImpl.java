@@ -1,5 +1,7 @@
 package com.tkym.labs.sharedmem.win;
 
+import static com.tkym.labs.sharedmem.win.Win32Error.ERROR_FILE_NOT_FOUND;
+
 import java.util.concurrent.TimeoutException;
 
 import com.tkym.labs.sharedmem.api.SharedMemory;
@@ -13,18 +15,12 @@ import com.tkym.labs.sharedmem.api.SharedMemoryLock;
 class SharedMemoryLockImpl implements SharedMemoryLock{
 	private static final String EXTENSION = ".mtx";
 	public static final int DEFAULT_TIMEOUT = 1000;
-	private final Mutex mutex;
-	private boolean locked = false;
+	private final String mutexName;
+	private Mutex mutex = null;
 	private final SharedMemoryImpl sharedMemory;
 	SharedMemoryLockImpl(SharedMemoryImpl sharedMemory, String name){
 		this.sharedMemory = sharedMemory;
-		try {
-			mutex = MutexRepository.
-					getInstance().
-					create(name+EXTENSION);
-		} catch (BaseNamedObjectsException e) {
-			throw new SharedMemoryException(e);
-		} 
+		mutexName = name + EXTENSION;
 	}
 	@Override
 	public SharedMemory infinity(){
@@ -36,34 +32,50 @@ class SharedMemoryLockImpl implements SharedMemoryLock{
 	}
 	@Override
 	public SharedMemory until(int millisec) throws TimeoutException{
-		if (locked)
+		if (isLocked())
 			return this.sharedMemory;
 		try {
+			mutex = openOrCreateMutex();
 			mutex.waitFor(millisec);
-			locked = true;
 		} catch (BaseNamedObjectsException e) {
 			throw new SharedMemoryException(e);
 		}
 		return this.sharedMemory;
 	}
+	
+	Mutex openOrCreateMutex() throws BaseNamedObjectsException{
+		try{
+			return MutexRepository.
+					getInstance().
+					open(mutexName);
+		}catch (BaseNamedObjectsException e){
+			if (e.getCode() == ERROR_FILE_NOT_FOUND.code)
+				return MutexRepository.
+						getInstance().
+						create(mutexName);
+			throw e;
+		}
+	}
+	
 	@Override
 	public SharedMemory release(){
-		if (!locked)
+		if (!isLocked())
 			return this.sharedMemory;
 		try {
 			mutex.release();
-			locked = false;
+			mutex.close();
+			mutex = null;
 		} catch (BaseNamedObjectsException e) {
 			throw new SharedMemoryException(e);
 		}
 		return this.sharedMemory;
 	}
 	public boolean isLocked(){
-		return locked;
+		return mutex != null;
 	}
 	@Override
 	protected void finalize() throws Throwable {
-		if (locked) release();
+		if (isLocked()) release();
 		super.finalize();
 	}
 }
